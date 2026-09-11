@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 濫用的偵測與反制:2026 年 9 月|Anthropic 威脅情報報告 繁中翻譯</title>
+<meta name="description" content="Anthropic《Detecting and countering misuse of AI: September 2026》非官方繁體中文翻譯">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<style>
+:root{
+  --bg:#faf9f6; --fg:#1f2328; --muted:#6a737d; --accent:#8a6d3b; --line:#e3ddd0;
+  --toc-bg:#f3f1ea; --code-bg:#eeece4; --mark:#fff3cd;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14161a; --fg:#d6d3cc; --muted:#8b8b8b; --accent:#c9a86a; --line:#2c2f36; --toc-bg:#1b1e24; --code-bg:#21242b; --mark:#4a3f1e; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.85;font-size:16px}
+.layout{display:flex;max-width:1200px;margin:0 auto}
+nav#toc{width:300px;flex:none;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--toc-bg);padding:20px 14px;border-right:1px solid var(--line);font-size:13px}
+nav#toc h2{font-size:14px;margin:4px 0 10px;color:var(--muted)}
+nav#toc a{display:block;color:var(--fg);text-decoration:none;padding:3px 8px;border-radius:6px;margin:1px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav#toc a:hover{background:var(--line)}
+nav#toc a.lv2{padding-left:20px;color:var(--muted)}
+main{flex:1;min-width:0;padding:36px 44px 90px}
+.banner{background:var(--toc-bg);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:13.5px;color:var(--muted);margin-bottom:28px}
+.banner a{color:var(--accent)}
+main h1{font-size:26px;line-height:1.4;border-bottom:2px solid var(--accent);padding-bottom:12px}
+main h2{font-size:21px;margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:8px}
+main h3{font-size:18px;margin-top:1.8em}
+main h4{font-size:16px;color:var(--muted)}
+main a{color:var(--accent)}
+main code{background:var(--code-bg);padding:1px 6px;border-radius:4px;font-size:.88em;word-break:break-all}
+main pre{background:var(--code-bg);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.6}
+main pre code{background:none;padding:0}
+main table{border-collapse:collapse;width:100%;font-size:14px;display:block;overflow-x:auto}
+main th,main td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+main th{background:var(--toc-bg)}
+main blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1.2em;color:var(--muted)}
+#topbtn{position:fixed;right:18px;bottom:18px;background:var(--accent);color:var(--bg);border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;opacity:.85}
+#menubtn{display:none}
+@media (max-width: 900px){
+  nav#toc{position:fixed;left:-320px;transition:left .25s;z-index:9;box-shadow:2px 0 12px rgba(0,0,0,.2)}
+  nav#toc.open{left:0}
+  #menubtn{display:block;position:fixed;left:14px;bottom:18px;z-index:10;background:var(--accent);color:var(--bg);border:none;border-radius:50%;width:44px;height:44px;font-size:18px;cursor:pointer;opacity:.9}
+  main{padding:24px 18px 90px}
+}
+#loading{text-align:center;padding:80px 0;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav id="toc"><h2>目錄</h2><div id="toclist"></div></nav>
+<main>
+<div class="banner">
+本頁為 Anthropic《Detecting and countering misuse of AI: September 2026》的<b>非官方繁體中文翻譯</b>,僅供社群學習;內容以 <a href="https://www.anthropic.com/threat-intelligence-report-september-2026" target="_blank" rel="noopener">官方原文</a> 與 <a href="https://www-cdn.anthropic.com/e50be2e51e7695dc4b1366a37a245a597377d3b5/Anthropic-Detecting-and-countering-091026.pdf" target="_blank" rel="noopener">官方 PDF</a> 為準。版權屬 Anthropic。
+</div>
+<div id="loading">載入報告中…</div>
+<article id="content"></article>
+</main>
+</div>
+<button id="menubtn" onclick="document.getElementById('toc').classList.toggle('open')">☰</button>
+<button id="topbtn" onclick="scrollTo({top:0,behavior:'smooth'})" title="回頂部">↑</button>
+<script>
+(async function(){
+  const parts = ["zh/part1.md","zh/part2.md","zh/part3.md","zh/part4.md"];
+  let md = "";
+  try{
+    for (const p of parts){
+      const r = await fetch(p);
+      if (!r.ok) throw new Error(p + " " + r.status);
+      md += (await r.text()) + "\n\n";
+    }
+  }catch(e){
+    document.getElementById("loading").textContent = "載入失敗:" + e.message;
+    return;
+  }
+  marked.setOptions({mangle:false, headerIds:false});
+  const html = marked.parse(md);
+  const el = document.getElementById("content");
+  el.innerHTML = html;
+  document.getElementById("loading").remove();
+  // 生成目錄(h1/h2)+錨點
+  const toc = document.getElementById("toclist");
+  let n = 0;
+  el.querySelectorAll("h1,h2").forEach(h=>{
+    const id = "s" + (++n);
+    h.id = id;
+    const a = document.createElement("a");
+    a.href = "#" + id;
+    a.textContent = h.textContent;
+    a.className = h.tagName === "H2" ? "lv2" : "";
+    a.onclick = ()=>document.getElementById("toc").classList.remove("open");
+    toc.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>
